@@ -51,14 +51,14 @@ todos().then((enlace) => {
 });
 
 pokemon('togepi').then((referencia) => {
-    
     tipo = referencia.types;
     habilidades = referencia.abilities;
-    imagen = referencia.sprites.front_default;
+    imagen = referencia.sprites.other.dream_world.front_default;
     // $picture.src=datos
     // console.log(habilidades);
-    // console.log(imagen);
+    console.log(imagen);
     console.log(tipo);
+    console.log(habilidades)
 });
 
 ubicaciones('togepi').then((direccion) => {
