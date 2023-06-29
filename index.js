@@ -43,54 +43,63 @@ const crearListaUbicacion = (lista) => {
     console.log(listado.join())
 }
 
+const pokemonElegido = 'pikachu'
+
 const tipos = async () => {
-    const response = await fetch(
+    const response_tipos = await fetch(
         "https://pokeapi.co/api/v2/type/");
 
-    return response.json();
+    return response_tipos.json();
 };
 
 const todos = async () => {
-    const enlace = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/");
+    const response_todos = await fetch(
+        "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1000");
 
-    return enlace.json();
+    return response_todos.json();
 }
 
 const pokemon = async (nombre) => {
-    const referencia = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}/`);
+    const response_pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}/`);
 
-    return referencia.json();
+    return response_pokemon.json();
 }
 
 const ubicacion = async (nombre) => {
-    const respuesta = await fetch(
+    const response_ubicacion = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${nombre}/encounters`);
-    return respuesta.json();
+    return response_ubicacion.json();
 };
 
 // const $picture = document.querySelector("#pokemon-figure")
 
-tipos().then((response) => {
-    allTypes = response.results;
+tipos().then((response_tipos) => {
+    allTypes = response_tipos.results;
     crearListaTipos(allTypes);
 });
 
-todos().then((enlace) => {
-    pokemons = enlace.results;
+todos().then((response_todos) => {
+    pokemons = response_todos.results;
     crearListaNombres(pokemons)
 });
 
-pokemon('togepi').then((referencia) => {
-    tipo = referencia.types;
-    habilidades = referencia.abilities;
-    imagen = referencia.sprites.other.dream_world.front_default;
+pokemon(pokemonElegido).then((response_pokemon) => {
+    id = response_pokemon.id
+    peso = response_pokemon.weight;
+    estatura = response_pokemon.height;
+    tipo = response_pokemon.types;
+    habilidades = response_pokemon.abilities;
+    imagen = response_pokemon.sprites.other.dream_world.front_default;
+    console.log(peso)
+    console.log(estatura)
+    console.log(imagen)
+    console.log(id)
     // $picture.src=datos
     crearListaTipo(tipo)
     crearListaHabilidades(habilidades)
 });
 
-ubicacion('togepi').then((respuesta) => {
-    ubi = respuesta;
-    crearListaUbicacion(ubi)
+ubicacion(pokemonElegido).then((response_ubicacion) => {
+    ubicaciones = response_ubicacion;
+    crearListaUbicacion(ubicaciones)
 });
