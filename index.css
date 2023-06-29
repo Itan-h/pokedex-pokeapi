@@ -37,7 +37,7 @@
     height: 250px;
 }
 #frame-picture{
-    background-color: white;
+    background-color: #ffff0000;
     width: 300px;
     height: 300px;
     display: flex;
@@ -54,4 +54,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+#frame-name{
+    background-color: #ffff0000;
 }
