@@ -36,7 +36,7 @@ const crearListaHabilidades = (lista) => {
     let listado = []
     lista.forEach((poke) => {
     habilidades = poke.ability.name;
-    listado.push(habilidades.replaceAll('-',' '))
+    listado.push(' ' + habilidades.replaceAll('-',' '))
     });
     return listado.join()
 }
@@ -47,14 +47,14 @@ const crearListaNombres = (lista) => {
     nombres = poke.name;
     listado.push(nombres)
     });
-    console.log(listado)
+    return listado
 }
 
 const crearListaUbicacion = (lista) => {
     let listado = []
     lista.forEach((poke) => {
     ubicaciones = poke.location_area.name;
-    listado.push(ubicaciones.replaceAll('-', ' '))
+    listado.push(' ' + ubicaciones.replaceAll('-', ' '))
     });
     return listado.join()
 }
@@ -73,8 +73,6 @@ const todos = async () => {
     return response_todos.json();
 }
 
-
-
 const pokemon = async (nombre) => {
     const response_pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}/`);
 
@@ -87,8 +85,6 @@ const ubicacion = async (nombre) => {
     return response_ubicacion.json();
 };
 
-// const $picture = document.querySelector("#pokemon-figure")
-
 tipos().then((response_tipos) => {
     allTypes = response_tipos.results;
     crearListaTipos(allTypes);
@@ -97,37 +93,45 @@ tipos().then((response_tipos) => {
 todos().then((response_todos) => {
     pokemons = response_todos.results;
     crearListaNombres(pokemons)
+    return pokemons
 });
 
 
 $entrada.addEventListener("submit", (e) => {
     e.preventDefault()
     var pokemonNombre = $pokemonElegido.value
+    var flag = false
+    let i = 0
     console.log(pokemonNombre)
 
-    $name.innerText = pokemonNombre.toUpperCase()
-pokemon(pokemonNombre).then((response_pokemon) => {
-    id = response_pokemon.id
-    peso = response_pokemon.weight;
-    estatura = response_pokemon.height;
-    tipo = response_pokemon.types;
-    habilidades = response_pokemon.abilities;
-    imagen = response_pokemon.sprites.other.dream_world.front_default;
-    $no.innerText = id
-    $tipo.innerText = crearListaTipo(tipo)
-    $estatura.innerText = estatura + " dm"
-    $peso.innerText = peso + " hg"
-    $habilidades.innerText = crearListaHabilidades(habilidades)
-    console.log(peso)
-    console.log(estatura)
-    console.log(imagen)
-    $picture.src=imagen
-    // console.log(crearListaHabilidades(habilidades))
-    // console.log(crearListaTipo(tipo))
-})
+    while (i < 1000) {
+        if (pokemonNombre == crearListaNombres(pokemons)[i]) {
+            flag = true
+            break
+        }
+        i+= 1 }
 
-ubicacion(pokemonNombre).then((response_ubicacion) => {
-    ubicaciones = response_ubicacion;
-    $ubicaciones.innerText = crearListaUbicacion(ubicaciones)
-})
+    console.log(flag)
+    if (flag) {
+        $name.innerText = pokemonNombre.toUpperCase()
+    pokemon(pokemonNombre).then((response_pokemon) => {
+        id = response_pokemon.id
+        peso = response_pokemon.weight;
+        estatura = response_pokemon.height;
+        tipo = response_pokemon.types;
+        habilidades = response_pokemon.abilities;
+        imagen = response_pokemon.sprites.other.dream_world.front_default;
+        $no.innerText = id
+        $tipo.innerText = crearListaTipo(tipo)
+        $estatura.innerText = estatura + " dm"
+        $peso.innerText = peso + " hg"
+        $habilidades.innerText = crearListaHabilidades(habilidades)
+        $picture.src=imagen
+    })
+    ubicacion(pokemonNombre).then((response_ubicacion) => {
+        ubicaciones = response_ubicacion;
+        $ubicaciones.innerText = crearListaUbicacion(ubicaciones)
+    })
+    }
+    else alert('nombre o pokemon no existe')
 })
