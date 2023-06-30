@@ -14,7 +14,7 @@ const crearListaTipo = (lista) => {
     let listado = []
     lista.forEach((poke) => {
     tipo = poke.type.name;
-    listado.push(tipo)
+    listado.push(' '+ tipo)
     });
     return listado.join()
 }
@@ -68,7 +68,7 @@ const tipos = async () => {
 
 const todos = async () => {
     const response_todos = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1000");
+        "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1281");
 
     return response_todos.json();
 }
@@ -99,12 +99,12 @@ todos().then((response_todos) => {
 
 $entrada.addEventListener("submit", (e) => {
     e.preventDefault()
-    var pokemonNombre = $pokemonElegido.value
+    var pokemonNombre = $pokemonElegido.value.toLowerCase().replaceAll(' ', '-')
     var flag = false
     let i = 0
     console.log(pokemonNombre)
 
-    while (i < 1000) {
+    while (i <= 1281) {
         if (pokemonNombre == crearListaNombres(pokemons)[i]) {
             flag = true
             break
@@ -113,7 +113,7 @@ $entrada.addEventListener("submit", (e) => {
 
     console.log(flag)
     if (flag) {
-        $name.innerText = pokemonNombre.toUpperCase()
+        $name.innerText = pokemonNombre.toUpperCase().replaceAll('-', ' ')
     pokemon(pokemonNombre).then((response_pokemon) => {
         id = response_pokemon.id
         peso = response_pokemon.weight;
@@ -121,17 +121,27 @@ $entrada.addEventListener("submit", (e) => {
         tipo = response_pokemon.types;
         habilidades = response_pokemon.abilities;
         imagen = response_pokemon.sprites.other.dream_world.front_default;
+        $picture.src=imagen
         $no.innerText = id
         $tipo.innerText = crearListaTipo(tipo)
         $estatura.innerText = estatura + " dm"
         $peso.innerText = peso + " hg"
         $habilidades.innerText = crearListaHabilidades(habilidades)
-        $picture.src=imagen
     })
     ubicacion(pokemonNombre).then((response_ubicacion) => {
         ubicaciones = response_ubicacion;
         $ubicaciones.innerText = crearListaUbicacion(ubicaciones)
     })
     }
-    else alert('nombre o pokemon no existe')
+    else {
+        $name.innerText = ""
+        $no.innerText = ""
+        $tipo.innerText = ""
+        $estatura.innerText = ""
+        $peso.innerText = ""
+        $habilidades.innerText = ""
+        $ubicaciones.innerText =""
+        $picture.src="https://img.freepik.com/free-vector/black-white-spiral-background_1048-16005.jpg?w=2000"
+        alert('nombre o pokemon no existe')
+        }
 })
